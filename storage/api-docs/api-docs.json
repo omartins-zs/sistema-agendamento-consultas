@@ -1,0 +1,1446 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Sistema de Agendamento de Consultas API",
+        "description": "API REST para gerenciamento de agendamento de consultas médicas",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Servidor de desenvolvimento"
+        }
+    ],
+    "paths": {
+        "/agenda": {
+            "get": {
+                "tags": [
+                    "Agenda"
+                ],
+                "summary": "Consultar agenda",
+                "description": "Consulta a agenda de um médico em um período de datas. Retorna lista de médicos e consultas agendadas.",
+                "operationId": "fd2247af881ca6d93be4865bd1521aea",
+                "parameters": [
+                    {
+                        "name": "medico_id",
+                        "in": "query",
+                        "description": "ID do médico (obrigatório para listar consultas)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "data_inicio",
+                        "in": "query",
+                        "description": "Data de início do período (formato: Y-m-d). Padrão: data atual",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "data_fim",
+                        "in": "query",
+                        "description": "Data de fim do período (formato: Y-m-d). Padrão: data atual",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Agenda consultada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Agenda consultada com sucesso."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "medicos": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "medico_selecionado": {
+                                                    "type": "object",
+                                                    "nullable": true
+                                                },
+                                                "data_inicio": {
+                                                    "type": "string",
+                                                    "format": "date"
+                                                },
+                                                "data_fim": {
+                                                    "type": "string",
+                                                    "format": "date"
+                                                },
+                                                "consultas": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Médico não encontrado"
+                    }
+                }
+            }
+        },
+        "/consultas": {
+            "get": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Listar consultas",
+                "description": "Retorna uma lista paginada de consultas com filtros opcionais",
+                "operationId": "01510f921f554a86fd3771ea2fa3e06a",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status: agendada, cancelada, realizada, remarcada",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "agendada",
+                                "cancelada",
+                                "realizada",
+                                "remarcada"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "medico_id",
+                        "in": "query",
+                        "description": "Filtrar por ID do médico",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "data_consulta",
+                        "in": "query",
+                        "description": "Filtrar por data (formato: Y-m-d)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "tipo_consulta",
+                        "in": "query",
+                        "description": "Filtrar por tipo: normal, exame, procedimento, cirurgia",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "normal",
+                                "exame",
+                                "procedimento",
+                                "cirurgia"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "tipo_agendamento",
+                        "in": "query",
+                        "description": "Filtrar por tipo: normal, encaixe, reagendamento",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "normal",
+                                "encaixe",
+                                "reagendamento"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de consultas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Consultas listadas com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Criar consulta",
+                "description": "Agenda uma nova consulta. Valida conflitos de horário, antecedência mínima de 2 horas (exceto encaixes).",
+                "operationId": "46b3a122fc0b57f09d870d31a82b4138",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "paciente_id",
+                                    "medico_id",
+                                    "sala_id",
+                                    "data_consulta",
+                                    "horario_inicio",
+                                    "horario_fim"
+                                ],
+                                "properties": {
+                                    "paciente_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "medico_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sala_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "data_consulta": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-20"
+                                    },
+                                    "horario_inicio": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "14:00"
+                                    },
+                                    "horario_fim": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "15:00"
+                                    },
+                                    "tipo_consulta": {
+                                        "type": "string",
+                                        "enum": [
+                                            "normal",
+                                            "exame",
+                                            "procedimento",
+                                            "cirurgia"
+                                        ],
+                                        "example": "normal",
+                                        "nullable": true
+                                    },
+                                    "tipo_agendamento": {
+                                        "type": "string",
+                                        "enum": [
+                                            "normal",
+                                            "encaixe",
+                                            "reagendamento"
+                                        ],
+                                        "example": "normal",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Consulta agendada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Consulta agendada com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/consultas/{id}": {
+            "get": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Buscar consulta",
+                "description": "Retorna os dados de uma consulta específica",
+                "operationId": "433dd6f5f158de80a94b15f74ccb8f62",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da consulta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Consulta encontrada"
+                    },
+                    "404": {
+                        "description": "Consulta não encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Atualizar consulta",
+                "description": "Atualiza os dados de uma consulta existente",
+                "operationId": "4de7d9d5a01455ec86c85dba0e3bcbde",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da consulta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "paciente_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "medico_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sala_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "data_consulta": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-21"
+                                    },
+                                    "horario_inicio": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "15:00"
+                                    },
+                                    "horario_fim": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "16:00"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "agendada",
+                                            "cancelada",
+                                            "realizada",
+                                            "remarcada"
+                                        ],
+                                        "example": "agendada"
+                                    },
+                                    "tipo_consulta": {
+                                        "type": "string",
+                                        "enum": [
+                                            "normal",
+                                            "exame",
+                                            "procedimento",
+                                            "cirurgia"
+                                        ],
+                                        "example": "normal"
+                                    },
+                                    "tipo_agendamento": {
+                                        "type": "string",
+                                        "enum": [
+                                            "normal",
+                                            "encaixe",
+                                            "reagendamento"
+                                        ],
+                                        "example": "normal"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Consulta atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Consulta não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Excluir consulta",
+                "description": "Exclui uma consulta do sistema",
+                "operationId": "42a278e822bed8cf0abd0e15786c0b33",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da consulta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Consulta excluída com sucesso"
+                    },
+                    "404": {
+                        "description": "Consulta não encontrada"
+                    }
+                }
+            }
+        },
+        "/consultas/{id}/cancelar": {
+            "post": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Cancelar consulta",
+                "description": "Cancela uma consulta agendada",
+                "operationId": "9b3a8153fb33579edc5b483dc7550be4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da consulta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "motivo_cancelamento"
+                                ],
+                                "properties": {
+                                    "motivo_cancelamento": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Paciente não pode comparecer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Consulta cancelada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Consulta cancelada com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Consulta não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/consultas/{id}/remarcar": {
+            "post": {
+                "tags": [
+                    "Consultas"
+                ],
+                "summary": "Remarcar consulta",
+                "description": "Remarca uma consulta (cria nova consulta e marca a original como remarcada)",
+                "operationId": "089bbb0ce3ee84a92bec07de89b2c3e2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da consulta original",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "data_consulta",
+                                    "horario_inicio",
+                                    "horario_fim"
+                                ],
+                                "properties": {
+                                    "data_consulta": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-25"
+                                    },
+                                    "horario_inicio": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "10:00"
+                                    },
+                                    "horario_fim": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "11:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Consulta remarcada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Consulta remarcada com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Consulta não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/medicos": {
+            "get": {
+                "tags": [
+                    "Médicos"
+                ],
+                "summary": "Listar médicos",
+                "description": "Retorna uma lista paginada de médicos cadastrados",
+                "operationId": "a36e38a9b14438b86c016392095f0256",
+                "responses": {
+                    "200": {
+                        "description": "Lista de médicos retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Médicos listados com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Médicos"
+                ],
+                "summary": "Criar médico",
+                "description": "Cadastra um novo médico no sistema",
+                "operationId": "112d0662b974fe0c3422ff537801aeea",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "crm",
+                                    "especialidade"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Dr. João Silva"
+                                    },
+                                    "crm": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "12345-SP"
+                                    },
+                                    "especialidade": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Cardiologia"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "(11) 98765-4321",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 100,
+                                        "example": "joao.silva@email.com",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Médico criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Médico cadastrado com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/medicos/{id}": {
+            "get": {
+                "tags": [
+                    "Médicos"
+                ],
+                "summary": "Buscar médico",
+                "description": "Retorna os dados de um médico específico",
+                "operationId": "980e0ce811f9a6f88e80c6bd69c303e4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do médico",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Médico encontrado"
+                    },
+                    "404": {
+                        "description": "Médico não encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Médicos"
+                ],
+                "summary": "Atualizar médico",
+                "description": "Atualiza os dados de um médico existente",
+                "operationId": "d3c4d79b64d628f339a9bfc8e6e7440d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do médico",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Dr. João Silva"
+                                    },
+                                    "crm": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "12345-SP"
+                                    },
+                                    "especialidade": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Cardiologia"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "(11) 98765-4321",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 100,
+                                        "example": "joao.silva@email.com",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Médico atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Médico não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Médicos"
+                ],
+                "summary": "Excluir médico",
+                "description": "Exclui um médico do sistema",
+                "operationId": "27ff25518376e2aa8439cc21bf1de848",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do médico",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Médico excluído com sucesso"
+                    },
+                    "404": {
+                        "description": "Médico não encontrado"
+                    }
+                }
+            }
+        },
+        "/pacientes": {
+            "get": {
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Listar pacientes",
+                "description": "Retorna uma lista paginada de pacientes cadastrados. Permite busca por nome ou CPF.",
+                "operationId": "b7ab039c8ccaa67429bbf78446fc7ce1",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Busca por nome ou CPF",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de pacientes retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Pacientes listados com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Criar paciente",
+                "description": "Cadastra um novo paciente no sistema",
+                "operationId": "4acb7bc00130190fa5a895b88f299812",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nome",
+                                    "cpf",
+                                    "data_nascimento"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Maria Santos"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "maxLength": 11,
+                                        "minLength": 11,
+                                        "example": "12345678901"
+                                    },
+                                    "data_nascimento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-05-15"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "(11) 91234-5678",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 100,
+                                        "example": "maria.santos@email.com",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Paciente criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Paciente cadastrado com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/pacientes/{id}": {
+            "get": {
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Buscar paciente",
+                "description": "Retorna os dados de um paciente específico",
+                "operationId": "4fe35375ded6a4b04e47f0818bf541fb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do paciente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paciente encontrado"
+                    },
+                    "404": {
+                        "description": "Paciente não encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Atualizar paciente",
+                "description": "Atualiza os dados de um paciente existente",
+                "operationId": "46f113a459fd7d03749d131073b11f73",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do paciente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "maxLength": 100,
+                                        "example": "Maria Santos"
+                                    },
+                                    "cpf": {
+                                        "type": "string",
+                                        "maxLength": 11,
+                                        "minLength": 11,
+                                        "example": "12345678901"
+                                    },
+                                    "data_nascimento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1990-05-15"
+                                    },
+                                    "telefone": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "(11) 91234-5678",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 100,
+                                        "example": "maria.santos@email.com",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Paciente atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Paciente não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pacientes"
+                ],
+                "summary": "Excluir paciente",
+                "description": "Exclui um paciente do sistema",
+                "operationId": "0f08ed0b5d03640f60747c47a1308f87",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do paciente",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paciente excluído com sucesso"
+                    },
+                    "404": {
+                        "description": "Paciente não encontrado"
+                    }
+                }
+            }
+        },
+        "/salas": {
+            "get": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Listar salas",
+                "description": "Retorna uma lista paginada de salas cadastradas",
+                "operationId": "77cbb01548b24a50ac966f2079599ed4",
+                "responses": {
+                    "200": {
+                        "description": "Lista de salas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Salas listadas com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Criar sala",
+                "description": "Cadastra uma nova sala no sistema",
+                "operationId": "78efa5809330d45e35a25bf20782b383",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "codigo"
+                                ],
+                                "properties": {
+                                    "codigo": {
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "SALA-101"
+                                    },
+                                    "andar": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "1º Andar",
+                                        "nullable": true
+                                    },
+                                    "tipo": {
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Consulta",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sala criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sala cadastrada com sucesso."
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/salas/{id}": {
+            "get": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Buscar sala",
+                "description": "Retorna os dados de uma sala específica",
+                "operationId": "b2fc0da71a1d9dfb169b33e94db990fd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sala encontrada"
+                    },
+                    "404": {
+                        "description": "Sala não encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Atualizar sala",
+                "description": "Atualiza os dados de uma sala existente",
+                "operationId": "16d289d729227b559c8917a2cb9778a2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "codigo": {
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "SALA-101"
+                                    },
+                                    "andar": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "1º Andar",
+                                        "nullable": true
+                                    },
+                                    "tipo": {
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "example": "Consulta Geral",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sala atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Sala não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Salas"
+                ],
+                "summary": "Excluir sala",
+                "description": "Exclui uma sala do sistema",
+                "operationId": "c20c7f5d8268d72283c5b74fb419a26e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID da sala",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sala excluída com sucesso"
+                    },
+                    "404": {
+                        "description": "Sala não encontrada"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ApiResponse": {
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "status_code": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Operação realizada com sucesso."
+                    },
+                    "data": {
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "ApiErrorResponse": {
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "error"
+                    },
+                    "status_code": {
+                        "type": "integer",
+                        "example": 422
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Dados inválidos."
+                    },
+                    "errors": {
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Médicos",
+            "description": "Endpoints para gerenciamento de médicos"
+        },
+        {
+            "name": "Pacientes",
+            "description": "Endpoints para gerenciamento de pacientes"
+        },
+        {
+            "name": "Salas",
+            "description": "Endpoints para gerenciamento de salas"
+        },
+        {
+            "name": "Consultas",
+            "description": "Endpoints para gerenciamento de consultas"
+        },
+        {
+            "name": "Agenda",
+            "description": "Endpoints para consulta de agenda"
+        }
+    ]
+}
