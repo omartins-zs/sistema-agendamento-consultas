@@ -1,0 +1,613 @@
+{
+	"info": {
+		"_postman_id": "sistema-agendamento-consultas-api",
+		"name": "Sistema de Agendamento de Consultas - API",
+		"description": "Collection completa da API do Sistema de Agendamento de Consultas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Médicos",
+			"item": [
+				{
+					"name": "Listar Médicos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/medicos",
+							"host": ["{{base_url}}"],
+							"path": ["medicos"]
+						},
+						"description": "Lista todos os médicos cadastrados (paginação de 15 por página)"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Médico",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Dr. João Silva\",\n    \"crm\": \"12345-SP\",\n    \"especialidade\": \"Cardiologia\",\n    \"telefone\": \"(11) 98765-4321\",\n    \"email\": \"joao.silva@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/medicos",
+							"host": ["{{base_url}}"],
+							"path": ["medicos"]
+						},
+						"description": "Cadastra um novo médico"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Médico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/medicos/:id",
+							"host": ["{{base_url}}"],
+							"path": ["medicos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Busca um médico específico por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Médico",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Dr. João Silva Atualizado\",\n    \"crm\": \"12345-SP\",\n    \"especialidade\": \"Cardiologia Clínica\",\n    \"telefone\": \"(11) 98765-4321\",\n    \"email\": \"joao.silva.novo@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/medicos/:id",
+							"host": ["{{base_url}}"],
+							"path": ["medicos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Atualiza os dados de um médico"
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Médico",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/medicos/:id",
+							"host": ["{{base_url}}"],
+							"path": ["medicos", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Exclui um médico"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pacientes",
+			"item": [
+				{
+					"name": "Listar Pacientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pacientes?search=João",
+							"host": ["{{base_url}}"],
+							"path": ["pacientes"],
+							"query": [
+								{
+									"key": "search",
+									"value": "João",
+									"description": "Busca por nome ou CPF (opcional)"
+								}
+							]
+						},
+						"description": "Lista todos os pacientes (com busca opcional por nome ou CPF)"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Paciente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Maria Santos\",\n    \"cpf\": \"12345678901\",\n    \"data_nascimento\": \"1990-05-15\",\n    \"telefone\": \"(11) 91234-5678\",\n    \"email\": \"maria.santos@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pacientes",
+							"host": ["{{base_url}}"],
+							"path": ["pacientes"]
+						},
+						"description": "Cadastra um novo paciente"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Paciente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pacientes/:id",
+							"host": ["{{base_url}}"],
+							"path": ["pacientes", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Busca um paciente específico por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Paciente",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Maria Santos Silva\",\n    \"cpf\": \"12345678901\",\n    \"data_nascimento\": \"1990-05-15\",\n    \"telefone\": \"(11) 91234-5678\",\n    \"email\": \"maria.santos.novo@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pacientes/:id",
+							"host": ["{{base_url}}"],
+							"path": ["pacientes", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Atualiza os dados de um paciente"
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Paciente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pacientes/:id",
+							"host": ["{{base_url}}"],
+							"path": ["pacientes", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Exclui um paciente"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Salas",
+			"item": [
+				{
+					"name": "Listar Salas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/salas",
+							"host": ["{{base_url}}"],
+							"path": ["salas"]
+						},
+						"description": "Lista todas as salas cadastradas"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Sala",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"codigo\": \"SALA-101\",\n    \"andar\": \"1º Andar\",\n    \"tipo\": \"Consulta\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/salas",
+							"host": ["{{base_url}}"],
+							"path": ["salas"]
+						},
+						"description": "Cadastra uma nova sala"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Sala",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/salas/:id",
+							"host": ["{{base_url}}"],
+							"path": ["salas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Busca uma sala específica por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Sala",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"codigo\": \"SALA-101\",\n    \"andar\": \"1º Andar\",\n    \"tipo\": \"Consulta Geral\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/salas/:id",
+							"host": ["{{base_url}}"],
+							"path": ["salas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Atualiza os dados de uma sala"
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Sala",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/salas/:id",
+							"host": ["{{base_url}}"],
+							"path": ["salas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Exclui uma sala"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consultas",
+			"item": [
+				{
+					"name": "Listar Consultas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/consultas?status=agendada&medico_id=1&data_consulta=2025-01-15",
+							"host": ["{{base_url}}"],
+							"path": ["consultas"],
+							"query": [
+								{
+									"key": "status",
+									"value": "agendada",
+									"description": "Filtrar por status: agendada, cancelada, realizada, remarcada"
+								},
+								{
+									"key": "medico_id",
+									"value": "1",
+									"description": "Filtrar por médico (opcional)"
+								},
+								{
+									"key": "data_consulta",
+									"value": "2025-01-15",
+									"description": "Filtrar por data (opcional)"
+								},
+								{
+									"key": "tipo_consulta",
+									"value": "normal",
+									"description": "Filtrar por tipo: normal, exame, procedimento, cirurgia (opcional)"
+								},
+								{
+									"key": "tipo_agendamento",
+									"value": "normal",
+									"description": "Filtrar por tipo: normal, encaixe, reagendamento (opcional)"
+								}
+							]
+						},
+						"description": "Lista todas as consultas com filtros opcionais"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Consulta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"paciente_id\": 1,\n    \"medico_id\": 1,\n    \"sala_id\": 1,\n    \"data_consulta\": \"2025-01-20\",\n    \"horario_inicio\": \"14:00\",\n    \"horario_fim\": \"15:00\",\n    \"tipo_consulta\": \"normal\",\n    \"tipo_agendamento\": \"normal\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/consultas",
+							"host": ["{{base_url}}"],
+							"path": ["consultas"]
+						},
+						"description": "Cria uma nova consulta. Validações: antecedência mínima de 2 horas, conflito de horário médico/sala"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Consulta (Encaixe)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"paciente_id\": 1,\n    \"medico_id\": 1,\n    \"sala_id\": 1,\n    \"data_consulta\": \"2025-01-20\",\n    \"horario_inicio\": \"14:00\",\n    \"horario_fim\": \"15:00\",\n    \"tipo_consulta\": \"normal\",\n    \"tipo_agendamento\": \"encaixe\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/consultas",
+							"host": ["{{base_url}}"],
+							"path": ["consultas"]
+						},
+						"description": "Cria uma consulta do tipo encaixe (não valida conflitos e antecedência)"
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Consulta",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/consultas/:id",
+							"host": ["{{base_url}}"],
+							"path": ["consultas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Busca uma consulta específica por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Consulta",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"paciente_id\": 1,\n    \"medico_id\": 1,\n    \"sala_id\": 1,\n    \"data_consulta\": \"2025-01-21\",\n    \"horario_inicio\": \"15:00\",\n    \"horario_fim\": \"16:00\",\n    \"status\": \"agendada\",\n    \"tipo_consulta\": \"normal\",\n    \"tipo_agendamento\": \"normal\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/consultas/:id",
+							"host": ["{{base_url}}"],
+							"path": ["consultas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Atualiza uma consulta"
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Consulta",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/consultas/:id",
+							"host": ["{{base_url}}"],
+							"path": ["consultas", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Exclui uma consulta"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancelar Consulta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"motivo_cancelamento\": \"Paciente não pode comparecer\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/consultas/:id/cancelar",
+							"host": ["{{base_url}}"],
+							"path": ["consultas", ":id", "cancelar"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Cancela uma consulta agendada"
+					},
+					"response": []
+				},
+				{
+					"name": "Remarcar Consulta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data_consulta\": \"2025-01-25\",\n    \"horario_inicio\": \"10:00\",\n    \"horario_fim\": \"11:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/consultas/:id/remarcar",
+							"host": ["{{base_url}}"],
+							"path": ["consultas", ":id", "remarcar"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Remarca uma consulta (cria nova consulta e marca a original como remarcada)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agenda",
+			"item": [
+				{
+					"name": "Consultar Agenda",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/agenda?medico_id=1&data_inicio=2025-01-20&data_fim=2025-01-25",
+							"host": ["{{base_url}}"],
+							"path": ["agenda"],
+							"query": [
+								{
+									"key": "medico_id",
+									"value": "1",
+									"description": "ID do médico (obrigatório para listar consultas)"
+								},
+								{
+									"key": "data_inicio",
+									"value": "2025-01-20",
+									"description": "Data de início do período (formato: Y-m-d). Padrão: data atual"
+								},
+								{
+									"key": "data_fim",
+									"value": "2025-01-25",
+									"description": "Data de fim do período (formato: Y-m-d). Padrão: data atual"
+								}
+							]
+						},
+						"description": "Consulta a agenda de um médico em um período de datas (data_inicio e data_fim)"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		}
+	]
+}
+
